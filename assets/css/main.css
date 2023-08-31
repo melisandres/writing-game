@@ -9,3 +9,23 @@ input{
     display: block;
     margin: 5px;
 }
+
+header{
+    display: flex;
+    align-items: center;
+    background-color: black;
+}
+
+main{
+    min-height: 95vh;
+}
+
+footer{
+    display: flex;
+    align-items: center;
+    background-color: black;
+    color: white;
+    text-align: center;
+    min-width: 100vw;
+
+}
