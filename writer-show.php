@@ -1,7 +1,7 @@
 <?php
 
 if(!isset($_GET['id']) || $_GET['id']==null){
-    header('location:index.php');
+    header('location:writer-show.php');
     exit;
 }
 

@@ -11,7 +11,7 @@ class Crud extends PDO{
         return $stmt->fetchAll();
     }
 
-    public function selectId($table, $value, $field='id', $url='client-index'){
+    public function selectId($table, $value, $field='id', $url='writer-show'){
         $sql = "SELECT * FROM $table WHERE $field = :$field";
         //SELECT * FROM $table WHERE $field = :id
         //the : is a "bind" and creates a hidden variable inside... 
