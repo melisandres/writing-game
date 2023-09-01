@@ -11,6 +11,7 @@ class Crud extends PDO{
         return $stmt->fetchAll();
     }
 
+
     public function selectId($table, $value, $field='id', $url='writer-show'){
         $sql = "SELECT * FROM $table WHERE $field = :$field";
         //SELECT * FROM $table WHERE $field = :id
@@ -34,6 +35,17 @@ class Crud extends PDO{
         return $stmt->fetch();
     }
 
+
+
+    public function selectWriters($table, $cell1, $cell2, $cell3){
+        $sql = "SELECT $cell1, $cell2, $cell3 FROM $table";
+        
+        $stmt = $this->query($sql);
+        return $stmt->fetchAll();
+    }
+
+
+
     public function insert($table, $data){
         $fieldName = implode(', ', array_keys($data));
         $fieldValue = ":".implode(', :', array_keys($data));
@@ -45,7 +57,15 @@ class Crud extends PDO{
             $stmt->bindValue(":$key", $value);
         }
 
+        if($stmt->execute()){
+            return $this->lastInsertId();
+        }else{
+            print_r($stmt->errorInfo());
+        }
+
         $stmt->execute();
+        echo $this->lastInsertId();
+        die();
         return $this->lastInsertId();
 
 /*         if($stmt->execute()){

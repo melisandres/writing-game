@@ -1,4 +1,5 @@
 <?php
+$pageName = "who are you?";
 include_once("snippets/header.html");
 
 ?>

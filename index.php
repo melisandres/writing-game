@@ -1,3 +1,3 @@
 <?php
-include_once("writer-create.php");
+include_once("writers-show.php");
 ?>
