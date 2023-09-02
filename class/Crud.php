@@ -19,7 +19,6 @@ class Crud extends PDO{
         
         $stmt = $this->prepare($sql);
         $stmt->bindValue(":$field", $value);
-        //:id = $value 
         $stmt->execute();
 
         $count = $stmt->rowCount();
@@ -30,10 +29,93 @@ class Crud extends PDO{
             exit;
         }
 
-        //other method prepare...
-
         return $stmt->fetch();
     }
+
+
+    public function selectKeyword($idValue, $field='id'){
+        $sql = "SELECT word, id FROM keyword INNER JOIN text_has_keyword ON keyword_id = keyword.id WHERE text_id = :$field";
+
+        $stmt = $this->prepare($sql);
+        $stmt->bindValue(":$field", $idValue);
+        $stmt->execute();
+
+        $result = array();
+
+        while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+            $result[$row['id']] = $row['word'];
+        }
+    
+        return $result;
+    }
+
+
+    public function selectIdText($table, $idValue, $field='id', $url='writer-show'){
+        $sql = "SELECT text.*, writer.firstName AS firstName, writer.lastName AS lastName
+        FROM text
+        INNER JOIN writer ON text.writer_id = writer.id WHERE $table.$field = :$field;";
+        
+        $stmt = $this->prepare($sql);
+        $stmt->bindValue(":$field", $idValue);
+        $stmt->execute();
+
+        $count = $stmt->rowCount();
+        if ($count == 1){
+            return $stmt->fetch();
+        }else{
+            header("location:$url.php");
+            exit;
+        }
+
+ 
+    }
+
+    public function selectWordId($assArr){
+        $value = $assArr['word'];
+        $sql = "SELECT id FROM keyword WHERE word = :word;";
+
+        $stmt = $this->prepare($sql);
+        $stmt->bindValue(":word", $value);
+        $stmt->execute();
+
+        $count = $stmt->rowCount();
+        if ($count == 1){
+            return $stmt->fetch();
+        }else{
+            exit;
+        }
+
+
+
+    }
+
+
+
+    public function selectText($table, $field = 'id'){
+        $sql = "SELECT text.*, writer.firstName AS firstName, writer.lastName AS lastName
+        FROM text
+        INNER JOIN writer ON text.writer_id = writer.id;";
+
+
+        //I need to make sure that I'm using : these to "prepare" my id... and other fields... but at the moment... it may be difficult with the dots. 
+        
+        $stmt = $this->prepare($sql);
+        //$stmt->bindValue(":$field", $value);
+        $stmt->execute();
+
+        /* $count = $stmt->rowCount();
+        if ($count == 1){
+            return $stmt->fetch();
+        }else{
+            header("location:$url.php");
+            exit;
+        } */
+
+        return $stmt->fetchAll();
+
+    }
+
+
 
 
 
@@ -46,10 +128,15 @@ class Crud extends PDO{
 
 
 
-    public function insert($table, $data){
+    public function insert($table, $data, $keyWordInsert = false){
         $fieldName = implode(', ', array_keys($data));
         $fieldValue = ":".implode(', :', array_keys($data));
-        $sql = "INSERT INTO $table ($fieldName) VALUES ($fieldValue)";
+        $keywordExtra = "";
+        if ($keyWordInsert){
+            $keywordExtra = "ON DUPLICATE KEY UPDATE word = VALUES(word)";
+        }
+
+        $sql = "INSERT INTO $table ($fieldName) VALUES ($fieldValue) $keywordExtra";
 
         $stmt = $this->prepare($sql);
 
@@ -64,8 +151,7 @@ class Crud extends PDO{
         }
 
         $stmt->execute();
-        echo $this->lastInsertId();
-        die();
+
         return $this->lastInsertId();
 
 /*         if($stmt->execute()){

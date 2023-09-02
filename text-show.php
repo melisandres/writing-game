@@ -12,19 +12,32 @@ $id=$_GET['id'];
 require_once('class/Crud.php');
 $crud = new Crud;
 
-$selectId = $crud->selectId('text', $id);
-
-extract($selectId);
+$textInfo = $crud->selectIdText('text', $id);
+$keywords = $crud->selectKeyword($id);
 
 
 include_once("./snippets/header.html");
 ?>
 
 
+    <h1><strong>author: </strong><span class="author"><?=$textInfo['firstName'] ." ". $textInfo['lastName'];?></span></h1>
+    <p><strong>title: </strong><?=$textInfo['title'];?></p>
+    <p><strong>date: </strong><?=$textInfo['date'];?></p>
 
-    <p><strong>title: </strong><?=$title;?></p>
-    <p><strong>date: </strong><?=$date;?></p>
-    <p><strong>text: </strong><?=$writing;?></p>
+    <?php
+     if (isset($keywords) && is_array($keywords)){
+        $i = 0;
+        foreach ($keywords as $key => $value) {
+            $i++;
+            echo  "<p class='keyword' data-keyword-index=$key>keyword $i: $value</p>";
+        }
+    } 
+    ?>
+
+
+    <p><strong>text: </strong><?=$textInfo['writing'];?></p>
+
+
 
     <form action="text-delete.php" method="POST">
         <input type="hidden" name="id" value="<?=$id;?>" >

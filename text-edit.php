@@ -11,7 +11,7 @@ $id = $_POST['id'];
 require_once('class/Crud.php');
 $crud = new Crud;
 
-$selectText = $crud->selectId('text', $id);
+$selectText = $crud->selectIdText('text', $id);
 
 extract($selectText);
 
@@ -20,9 +20,9 @@ include_once("snippets/header.html");
 
 
     <form action="text-update.php" method="post">
-        <span> put name here </span>
+        <span class="author"> <?=$selectText['firstName']." ".$selectText['lastName']?></span>
         <input type="hidden" name="id" value="<?=$id;?>">
-        <label>title
+        <label>title: 
             <input type="text" name="title" value="<?=$selectText['title']?>">
         </label>
         <label>write max 50 words: 

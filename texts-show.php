@@ -2,7 +2,7 @@
 require_once('class/Crud.php');
 
 $crud = new Crud;
-$select = $crud->select('text');
+$select = $crud->selectText('text');
 extract($select);
 
 $pageName = "all the texts!";
@@ -13,7 +13,7 @@ include_once("./snippets/header.html"); ?>
         <tr>
             <th>title</th>
             <th>date</th>
-            <th>writer_id</th>
+            <th>author</th>
         </tr>
         <?php
         foreach($select as $row){
@@ -21,7 +21,7 @@ include_once("./snippets/header.html"); ?>
         <tr>
             <td><a href="text-show.php?id=<?= $row['id']?>"> <?= $row['title']; ?></a></td>
             <td><?= $row['date']; ?></td>
-            <td><?= $row['writer_id']; ?></td>
+            <td><?= $row['firstName']." ".$row['lastName']; ?></td>
         </tr>
         <?php
         }
