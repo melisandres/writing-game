@@ -5,13 +5,14 @@ class Crud extends PDO{
         parent::__construct('mysql:host=localhost; dbname=tag; port=8889; charset=utf8', 'root', '');
     }
 
+    //returns every field from one table
     public function select($table, $field = 'id', $order = 'ASC'){
         $sql = "SELECT * FROM $table ORDER BY $field $order";
         $stmt = $this->query($sql);
         return $stmt->fetchAll();
     }
 
-
+    //returns elements in a table that match a specific search
     public function selectId($table, $value, $field='id', $url='writer-show'){
         $sql = "SELECT * FROM $table WHERE $field = :$field";
         //SELECT * FROM $table WHERE $field = :id
@@ -28,11 +29,10 @@ class Crud extends PDO{
             header("location:$url.php");
             exit;
         }
-
         return $stmt->fetch();
     }
 
-
+    //returns an array where the keys are keyword.id and the values are keyword.word. These values are only the ones associated to the text.id sent to the function
     public function selectKeyword($idValue, $field='id'){
         $sql = "SELECT word, id FROM keyword INNER JOIN text_has_keyword ON keyword_id = keyword.id WHERE text_id = :$field";
 
@@ -50,10 +50,16 @@ class Crud extends PDO{
     }
 
 
+    //returns all the text as well as the first and last name of the writer
+    //associated to the current text via its id
+    //I'm not using the variables I'm passing--this is a little confusing 
+    //it might make sense to include the getting of the keywords here.
     public function selectIdText($table, $idValue, $field='id', $url='writer-show'){
-        $sql = "SELECT text.*, writer.firstName AS firstName, writer.lastName AS lastName
-        FROM text
-        INNER JOIN writer ON text.writer_id = writer.id WHERE $table.$field = :$field;";
+        $sql = "SELECT text.*, writer.firstName AS firstName, 
+                writer.lastName AS lastName
+                FROM text INNER JOIN writer 
+                ON text.writer_id = writer.id 
+                WHERE $table.$field = :$field;";
         
         $stmt = $this->prepare($sql);
         $stmt->bindValue(":$field", $idValue);
@@ -68,6 +74,8 @@ class Crud extends PDO{
         }
     }
 
+    //returns the id of the keyword sent as the value of a one-item associative array
+    //I'm iterating elsewhere and sending it here... but it may be better to combine functions
     public function selectWordId($assArr){
         $value = $assArr['word'];
         $sql = "SELECT id FROM keyword WHERE word = :word;";
@@ -85,6 +93,7 @@ class Crud extends PDO{
     }
 
 
+    //returns all the keyword_ids associated to this current text.
     public function selectKeywordIds($id, $field='id'){
         $sql ="SELECT keyword_id
         FROM text_has_keyword
@@ -101,7 +110,8 @@ class Crud extends PDO{
     }
 
 
-
+    //I belive this is not being used... it seems like it would return a list
+    //of the texts based on a writer's id I should work on it, to use it later
     public function selectText($table, $field = 'id'){
         $sql = "SELECT text.*, writer.firstName AS firstName, writer.lastName AS lastName
         FROM text
@@ -129,7 +139,8 @@ class Crud extends PDO{
 
 
 
-
+    //this returns a list of writers to populate the select field that 
+    //gets generated in the create-text form
     public function selectWriters($table, $cell1, $cell2, $cell3){
         $sql = "SELECT $cell1, $cell2, $cell3 FROM $table";
         
@@ -138,7 +149,7 @@ class Crud extends PDO{
     }
 
 
-
+    //this can get called to insert text OR keywords.
     public function insert($table, $data, $keyWordInsert = false){
         $fieldName = implode(', ', array_keys($data));
         $fieldValue = ":".implode(', :', array_keys($data));
@@ -172,6 +183,8 @@ class Crud extends PDO{
         } */
     }
 
+    //this gets called to do a simple delete, based on an id of
+    //the item being deleted
     public function delete($table, $value, $url, $field='id'){
         $sql = "DELETE FROM $table WHERE $field = :$field;";
         $stmt = $this->prepare($sql); 
@@ -181,7 +194,12 @@ class Crud extends PDO{
         header("location:$url.php");
     }
 
-
+    //this gets called from a loop, perhaps I should add the 
+    //loop in this function. The value sent is an associative array
+    //of one element. Technically, I could change the sql statement, 
+    //to make it work with other unused lists... $value key is keyword_id, 
+    //and so the sql could be populated dynamically. But will I use this
+    //sort of function elsewhere?
     public function deleteUnusedKeywords($value, $field = 'id'){
         $sql = "DELETE FROM keyword
                 WHERE id = :$field
@@ -198,7 +216,9 @@ class Crud extends PDO{
 
 
 
-
+    //this is dynamic. it updates with all the elements
+    //in the POST (or $data) using keys and values to build 
+    //the sql query. 
     public function update($table, $data, $field = 'id'){
         $fieldName = null;
 

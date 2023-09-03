@@ -12,6 +12,7 @@ require_once('class/Crud.php');
 $crud = new Crud;
 
 $selectText = $crud->selectIdText('text', $id);
+$selectKeywords = $crud->selectKeywords($id);
 
 extract($selectText);
 
