@@ -17,6 +17,18 @@ if($stmt->execute(array($id))){
 $id = $_POST['id']; 
 require_once('class/Crud.php');
 $crud = new Crud;
-$crud->delete('text', $id, "index");
+
+//$keyWordIds is given an associative array where all keys are "keyword_id"
+$keyWordIds = $crud->selectKeywordIds($id);
+//delete text_has_keyword entries... Check if it deletes ALL
+$crud->delete('text_has_keyword', $id, "texts-show", "text_id");
+//delete the text entry
+$crud->delete('text', $id, "texts-show");
+
+//delete the keywords, if they aren't being used by other text_has_keyword
+foreach ($keyWordIds as $key => $value) {
+    $crud->deleteUnusedKeywords($value);
+}
+
 
 ?>

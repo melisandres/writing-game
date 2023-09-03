@@ -66,8 +66,6 @@ class Crud extends PDO{
             header("location:$url.php");
             exit;
         }
-
- 
     }
 
     public function selectWordId($assArr){
@@ -84,9 +82,24 @@ class Crud extends PDO{
         }else{
             exit;
         }
+    }
 
 
+    public function selectKeywordIds($id, $field='id'){
+        $sql ="SELECT keyword_id
+        FROM text_has_keyword
+        WHERE text_id = :$field;";
 
+        $stmt = $this->prepare($sql);
+        $stmt->bindValue(":$field", $id);
+        $stmt->execute();
+
+        $count = $stmt->rowCount();
+        if ($count >= 1){
+            return $stmt->fetchAll();
+        }else{
+            exit;
+        }
     }
 
 
@@ -162,13 +175,31 @@ class Crud extends PDO{
     }
 
     public function delete($table, $value, $url, $field='id'){
-        $sql = "DELETE FROM $table WHERE $field = :$field";
+        $sql = "DELETE FROM $table WHERE $field = :$field;";
         $stmt = $this->prepare($sql); 
         $stmt->bindValue(":$field", $value);
         $stmt->execute(); 
 
         header("location:$url.php");
     }
+
+
+    public function deleteUnusedKeywords($value, $field = 'id'){
+        $sql = "DELETE FROM keyword
+                WHERE id = :$field
+                AND NOT EXISTS (
+                    SELECT 1
+                    FROM text_has_keyword
+                    WHERE keyword_id = :$field
+                    );";
+        $stmt = $this->prepare($sql); 
+        $stmt->bindValue(":$field", $value['keyword_id']);
+        $stmt->execute();   
+    }
+
+
+
+
 
     public function update($table, $data, $field = 'id'){
         $fieldName = null;
