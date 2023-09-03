@@ -97,8 +97,6 @@ class Crud extends PDO{
         $count = $stmt->rowCount();
         if ($count >= 1){
             return $stmt->fetchAll();
-        }else{
-            exit;
         }
     }
 
