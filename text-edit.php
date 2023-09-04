@@ -38,6 +38,7 @@ include_once("snippets/header.html");
             <input type="text" name="keywords" value="<?=$keywords?>">
         </label>
             <input type="hidden" name="date" value="<?= date("Y-m-d H:i:s") ?>">
+            <input type="hidden" name="lastKeywords" value="<?= $keywords?>">
         <input type="submit" value="save">
     </form>
     

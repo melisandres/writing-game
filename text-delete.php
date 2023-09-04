@@ -20,7 +20,7 @@ $keyWordIds = $crud->selectKeywordIds($id);
 
 //check if there are any keywords... and if so
 if(isset($keyWordIds)){
-    //delete text_has_keyword entries
+    //delete ALL text_has_keyword entries
     $crud->delete('text_has_keyword', $id, "texts-show", "text_id");
     //delete the keywords, if they aren't being used by other text_has_keyword
     foreach ($keyWordIds as $key => $value) {

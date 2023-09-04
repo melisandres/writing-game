@@ -4,8 +4,9 @@ require_once('class/Crud.php');
 $crud = new Crud;
 
 
-//get the keywords from POST, copy, and remove
+//get the keywords from POST
 $keywords = $_POST['keywords'];
+//remove the keywords from POST
 unset($_POST['keywords']);
 
 
