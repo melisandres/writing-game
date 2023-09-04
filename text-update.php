@@ -2,7 +2,7 @@
 require_once("class/Crud.php");
 $crud = new Crud;
 
- //FROM TEXT STORE:
+//FROM TEXT STORE:
 //get the new keywords from POST, copy, and remove
 $keywords = $_POST['keywords'];
 unset($_POST['keywords']);
@@ -12,16 +12,6 @@ unset($_POST['keywords']);
 //get the previous keywords from POST, also remove
 $lastKeywords = $_POST['lastKeywords'];
 unset($_POST['lastKeywords']); 
-
-
-//now I will need to compare $keywords to $previousKeywords
-//before running code that deletes from text_has_keyword
-//only the lines that have ids that line up with the words
-//that are in $previousKeywords but are absent from $keywords.
-
-//this is where I'm at. 
-//this code may or may not return the right set of elements: 
-//$wordsToDelete = array_diff($existingWords, $yourListOfWords);
 
 
 //  √ 1. var_dump $keywords and previouskeywords... see how to make
@@ -47,9 +37,6 @@ $update = $crud->update("text", $_POST);
 //CHANGED from TEXT STORE:
 //prepare keywords array... to send to CRUD
 
-/* $lastKeywords = explode(',', $lastKeywords); */
-
-
 function prepareWords($words){
     echo $words;
     echo "<br>";
@@ -65,47 +52,11 @@ function prepareWords($words){
     }
     return $cleanedWordArray;
 }
-echo "keywords:";
-echo $keywords;
+
 $cleanedKeywords = prepareWords($keywords);
 $cleanedLastKeywords = prepareWords($lastKeywords);
-echo "cleanedKeywords:";
-var_dump($cleanedKeywords);
-echo "cleanedLastKeywords:";
-var_dump($cleanedLastKeywords);
-
-
 $wordsToCheck = array_diff($cleanedLastKeywords, $cleanedKeywords);
 
-/* //clean of spaces
-$cleanedKeywords = []; 
-foreach ($keywords as $word) {
-    array_push($cleanedKeywords, trim($word));
-} */
-
-
-
-
-/* foreach ($lastKeywords as $word) {
-    $word = trim($word);
-    if(!empty(trim($word))){
-        array_push($cleanedLastKeywords, trim($word));
-    }
-    array_push($cleanedLastKeywords, trim($word));
-}
- */
-
-
-
-
-echo "cleanedLastkeywords:<br>";
-var_dump($cleanedLastKeywords);
-echo "<br>";
-echo "cleanedKeywords:<br>";
-var_dump($cleanedKeywords);
-echo "<br>";
-echo "words to check(maybe delete):<br>";
-var_dump($wordsToCheck);
 
 
 //FROM TEXT STORE-- except, we already did the trim

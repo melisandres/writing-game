@@ -47,6 +47,12 @@ include_once("./snippets/header.html");
         <input type="hidden" name="id" value="<?=$id;?>" >
         <input type="submit" value="Mise a jour" >
     </form>
+    <form action="text-iterate.php" method="POST">  
+        <!--parent id is the id of the parent text-->    
+        <input type="hidden" name="parent_id" value="<?=$id;?>" >
+        <input type="submit" value="iterate" >
+    </form>
+
 
 
 
