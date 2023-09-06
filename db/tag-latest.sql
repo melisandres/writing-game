@@ -4,7 +4,7 @@ DROP TABLE IF EXISTS `mcandide_tag`.`writer` ;
 CREATE TABLE IF NOT EXISTS `mcandide_tag`.`writer` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `firstName` VARCHAR(25) NULL,
-  `LastName` VARCHAR(25) NULL,
+  `lastName` VARCHAR(25) NULL,
   `email` VARCHAR(40) NOT NULL,
   `birthday` DATE NULL,
   `password` VARCHAR(255) NOT NULL,
@@ -20,6 +20,7 @@ DROP TABLE IF EXISTS `mcandide_tag`.`text` ;
 
 CREATE TABLE IF NOT EXISTS `mcandide_tag`.`text` (
   `id` INT NOT NULL AUTO_INCREMENT,
+  `title` VARCHAR(45) NULL,
   `date` DATETIME NOT NULL,
   `constraint` VARCHAR(50) NULL,
   `note` VARCHAR(255) NULL,
@@ -50,7 +51,8 @@ DROP TABLE IF EXISTS `mcandide_tag`.`keyword` ;
 CREATE TABLE IF NOT EXISTS `mcandide_tag`.`keyword` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `word` VARCHAR(30) NULL,
-  PRIMARY KEY (`id`))
+  PRIMARY KEY (`id`),
+  UNIQUE INDEX `word_UNIQUE` (`word` ASC))
 ENGINE = InnoDB;
 
 
@@ -61,17 +63,17 @@ DROP TABLE IF EXISTS `mcandide_tag`.`text_has_keyword` ;
 
 CREATE TABLE IF NOT EXISTS `mcandide_tag`.`text_has_keyword` (
   `text_id` INT NOT NULL,
-  `keywords_id` INT NOT NULL,
-  PRIMARY KEY (`text_id`, `keywords_id`),
-  INDEX `fk_text_has_keywords_keywords1_idx` (`keywords_id` ASC),
-  INDEX `fk_text_has_keywords_text1_idx` (`text_id` ASC),
-  CONSTRAINT `fk_text_has_keywords_text1`
+  `keyword_id` INT NOT NULL,
+  PRIMARY KEY (`text_id`, `keyword_id`),
+  INDEX `fk_text_has_keyword_keyword1_idx` (`keyword_id` ASC),
+  INDEX `fk_text_has_keyword_text1_idx` (`text_id` ASC),
+  CONSTRAINT `fk_text_has_keyword_text1`
     FOREIGN KEY (`text_id`)
     REFERENCES `mcandide_tag`.`text` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
-  CONSTRAINT `fk_text_has_keywords_keywords1`
-    FOREIGN KEY (`keywords_id`)
+  CONSTRAINT `fk_text_has_keyword_keyword1`
+    FOREIGN KEY (`keyword_id`)
     REFERENCES `mcandide_tag`.`keyword` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)

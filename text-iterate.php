@@ -19,7 +19,7 @@ extract($selectWriters);
 $selectText = $crud->selectIdText('text', $parent_id);
 
 
-//get and treat the keywords
+//get keywords from db and treat them
 $selectKeywords = $crud->selectKeyword($parent_id);
 $keywords = "";
 foreach ($selectKeywords as $key => $value) {
@@ -51,8 +51,6 @@ include_once("snippets/header.html");
 
     </select>
     <span class="author">iterating on: <?=$selectText['firstName']." ".$selectText['lastName']?>'s words</span>
-    <label>parent id: </label>
-    <input type="hidden" name="parent_id" value="<?=$parent_id;?>">
     <label>title: 
         <input type="text" name="title" value="<?=$selectText['title']?>">
     </label>

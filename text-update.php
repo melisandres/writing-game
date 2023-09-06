@@ -14,21 +14,9 @@ $lastKeywords = $_POST['lastKeywords'];
 unset($_POST['lastKeywords']); 
 
 
-//  √ 1. var_dump $keywords and previouskeywords... see how to make
-//the structure the same for comparing
-//strings
-//  √ 2. check functions to compare and return elements only in previouskeywords
-//   3. check functions to loop through to delete lines of text_has_keyword 
-//where you check both the id of the word to delete AND the id of the text... 
-//   4. once you've managed to delete these lines, you will be able to run the 
-//code in delete, for deleting keywords that are not referenced in text_has_keyword.
-
-
-
 
 //SIMILAR TO TEXT STORE, BUT WITH UPDATE:
 //send what's left of the POST (text info) to CRUD
-
 $update = $crud->update("text", $_POST);
 
 
@@ -36,25 +24,12 @@ $update = $crud->update("text", $_POST);
 
 //CHANGED from TEXT STORE:
 //prepare keywords array... to send to CRUD
+//words comes in as a string, and comes out as a clean arra
+require_once('class/Prep.php');
+$prep = new Prep;
 
-function prepareWords($words){
-    echo $words;
-    echo "<br>";
-    $words = explode(',', $words);
-    var_dump($words);
-    echo "<br>";
-    $cleanedWordArray = [];
-    foreach ($words as $word) {
-        $word = trim($word);
-        if(!empty(trim($word))){
-            array_push($cleanedWordArray, trim($word));
-        }
-    }
-    return $cleanedWordArray;
-}
-
-$cleanedKeywords = prepareWords($keywords);
-$cleanedLastKeywords = prepareWords($lastKeywords);
+$cleanedKeywords = $prep->keywords($keywords);
+$cleanedLastKeywords = $prep->keywords($lastKeywords);
 $wordsToCheck = array_diff($cleanedLastKeywords, $cleanedKeywords);
 
 
@@ -64,10 +39,6 @@ $wordsToCheck = array_diff($cleanedLastKeywords, $cleanedKeywords);
 foreach ($cleanedKeywords as $word) {
     //cleaned of spaces
     $assArr = ['word' => trim($word)];
-    echo "<br> word to process: <br>";
-    echo $word;
-    echo "<br> what is the ass array? <br>";
-    var_dump($assArr);
 
     //inserted into the keywords table, (if it isn't already there)
     $crud->insert('keyword', $assArr, true);

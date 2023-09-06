@@ -22,7 +22,7 @@ DROP TABLE IF EXISTS `tag`.`writer` ;
 CREATE TABLE IF NOT EXISTS `tag`.`writer` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `firstName` VARCHAR(25) NULL,
-  `LastName` VARCHAR(25) NULL,
+  `lastName` VARCHAR(25) NULL,
   `email` VARCHAR(40) NOT NULL,
   `birthday` DATE NULL,
   `password` VARCHAR(255) NOT NULL,
@@ -41,7 +41,7 @@ CREATE TABLE IF NOT EXISTS `tag`.`text` (
   `date` DATETIME NOT NULL,
   `constraint` VARCHAR(50) NULL,
   `note` VARCHAR(255) NULL,
-  `writing` VARCHAR(45) NULL,
+  `writing` TEXT NULL,
   `writer_id` INT NOT NULL,
   `parent_id` INT NULL,
   PRIMARY KEY (`id`),
