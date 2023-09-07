@@ -9,7 +9,7 @@ try {
 }
 
 
-include_once("writers-show.php");
+include_once("texts-show.php");
 
 
 ?>
