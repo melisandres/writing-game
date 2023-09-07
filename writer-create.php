@@ -4,7 +4,6 @@ include_once("snippets/header.html");
 
 ?>
 
-
     <form action="writer-store.php" method="post">
         <label>first name
             <input type="text" name="firstName">
@@ -23,8 +22,6 @@ include_once("snippets/header.html");
         </label>
         <input type="submit" value="save">
     </form>
-    
-
     
 <?php
 include_once("snippets/footer.html");

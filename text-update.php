@@ -14,12 +14,9 @@ $lastKeywords = $_POST['lastKeywords'];
 unset($_POST['lastKeywords']); 
 
 
-
 //SIMILAR TO TEXT STORE, BUT WITH UPDATE:
 //send what's left of the POST (text info) to CRUD
 $update = $crud->update("text", $_POST);
-
-
 
 
 //CHANGED from TEXT STORE:
@@ -33,13 +30,11 @@ $cleanedLastKeywords = $prep->keywords($lastKeywords);
 $wordsToCheck = array_diff($cleanedLastKeywords, $cleanedKeywords);
 
 
-
 //FROM TEXT STORE-- except, we already did the trim
 //each keyword needs to be treated:
 foreach ($cleanedKeywords as $word) {
     //cleaned of spaces
     $assArr = ['word' => trim($word)];
-
     //inserted into the keywords table, (if it isn't already there)
     $crud->insert('keyword', $assArr, true);
     //we need that keyword's id: but we must remember that it comes as an array
@@ -73,26 +68,6 @@ if(isset($wordsToCheck) && !empty($wordsToCheck)){
 }else{
     header("location:texts-show.php");
 }
-
-
-
-
-
-
-
-
-/* echo "lastkeywords:<br>";
-var_dump($lastKeywords);
-echo "<br>";
-echo "keywords:<br>";
-var_dump($keywords);
-echo "<br>";
-echo "words to delete:<br>";
-var_dump($wordsToDelete);
-die(); */
-
-
-
 
 ?>
 

@@ -14,7 +14,6 @@ unset($_POST['keywords']);
 $textIdFromInsert = $crud->insert('text', $_POST);
 
 
-
 //prepare keywords array... to send to CRUD
 //$keywords = explode(',', $keywords);
 require_once('class/Prep.php');
